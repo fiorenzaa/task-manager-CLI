@@ -15,6 +15,14 @@ public class Program
         {
             Console.WriteLine($"Operasi tidak valid: {ex.Message}");
         }
+        catch (ArgumentException ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+        catch (FormatException)
+        {
+            Console.WriteLine("Error: Input harus berupa angka");
+        }
     }
 
     public static void Run()
@@ -43,7 +51,12 @@ public class Program
                 case "3":
                     Console.Write("Enter ID: ");
                     int markId = int.Parse(Console.ReadLine());
-                    tasks.Find(t => t.Id == markId)?.MarkComplete();
+                    var task = tasks.Find(t => t.Id == markId);
+                    if(task == null)
+                    {
+                        throw new ArgumentException($"Task dengan ID {markId} tidak ditemukan");
+                    }
+                    task.MarkComplete();
                     break;
                 case "4":
                     running = false;
